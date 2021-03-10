@@ -4,15 +4,15 @@ import 'geometry.dart';
 
 /// Định nghĩa nguyên mẫu đối tượng hình học dạng mảng các vùng
 class GeoJSONMultiPolygon implements Geometry {
-  List<List<List<List<double>>>> coordinates;
+  List<List<List<List<double>>>> coordinates  = <List<List<List<double>>>>[];
   GeoJSONMultiPolygon(this.coordinates);
 
   @override
   GeometryType get type => GeometryType.multiPolygon;
 
   GeoJSONMultiPolygon.fromMap(Map data) {
-    var llll = data['coordinates'];
-    final polyArray = <List<List<List<double>>>>[];
+    var llll = data['coordinates']; 
+    coordinates.clear();
     llll.forEach((lll) {
       final ringArray = <List<List<double>>>[];
       lll.forEach((ll) {
@@ -26,9 +26,8 @@ class GeoJSONMultiPolygon implements Geometry {
         });
         ringArray.add(posArray);
       });
-      polyArray.add(ringArray);
+      coordinates.add(ringArray);
     });
-    coordinates = polyArray;
   }
 
   @override

@@ -22,39 +22,45 @@ class GeoJSONFeature {
   /// Vẽ lại mô hình UML
 
   GeoJSONType get type => GeoJSONType.feature;
-  Geometry geometry;
+  late Geometry geometry;
 
   GeoJSONFeature(this.geometry);
 
-  String _id;
-  String get id => _id;
-  set id(String value) => _id = value;
+  String? id;
+  // String? get id => _id;
+  // set id(String? value) => _id = value;
 
-  var _properties = <String, dynamic>{};
-  Map<String, dynamic> get properties => _properties;
-  set properties(Map<String, dynamic> value) => _properties = value;
+  Map<String, dynamic> properties = <String, dynamic>{};
+  // Map<String, dynamic> get properties => _properties;
+  // set properties(Map<String, dynamic> value) => _properties = value;
 
-  List<double> _bbox; // [west, south, east, north]
-  List<double> get bbox => _bbox;
+  List<double>? _bbox; // [west, south, east, north]
+  List<double>? get bbox => _bbox;
 
-  String _title;
-  String get title => _title;
-  set title(String value) => _title = value;
+  String? _title;
+  String? get title => _title;
+  set title(String? value) => _title = value;
 
   GeoJSONFeature.fromMap(Map data) {
     geometry = Geometry.fromMap(data['geometry']);
-    _id = data['id'];
-    _properties = data['properties'];
-    List<dynamic> b = data['bbox'];
-    var bb = <double>[];
-    if (b != null) {
-      b.forEach((element) {
-        bb.add(element.toDouble());
-      });
-      if (bb.isNotEmpty && bb.length == 4) {
-        _bbox = bb;
+    if(data.containsKey('id')) id = data['id'];
+    if(data.containsKey('properties')) properties =  data['properties'];
+    if (data.containsKey('bbox')) {
+      final bboxMap = data['bbox'] as List;
+      if (bboxMap.length == 4) {
+        _bbox = data['bbox'];
       }
     }
+    // List<dynamic> b = data['bbox'];
+    // var bb = <double>[];
+    // if (b != null) {
+    //   b.forEach((element) {
+    //     bb.add(element.toDouble());
+    //   });
+    //   if (bb.isNotEmpty && bb.length == 4) {
+    //     _bbox = bb;
+    //   }
+    // }
     _title = data['title'];
   }
 
@@ -63,31 +69,24 @@ class GeoJSONFeature {
       case GeometryType.point:
         final geom = geometry as GeoJSONPoint;
         return geom.toMap();
-        break;
       case GeometryType.lineString:
         final geom = geometry as GeoJSONLineString;
         return geom.toMap();
-        break;
       case GeometryType.multiPoint:
         final geom = geometry as GeoJSONMultiPoint;
         return geom.toMap();
-        break;
       case GeometryType.polygon:
         final geom = geometry as GeoJSONPolygon;
         return geom.toMap();
-        break;
       case GeometryType.multiLineString:
         final geom = geometry as GeoJSONMultiLineString;
         return geom.toMap();
-        break;
       case GeometryType.multiPolygon:
         final geom = geometry as GeoJSONMultiPolygon;
         return geom.toMap();
-        break;
       case GeometryType.geometryCollection:
         final geom = geometry as GeoJSONGeometryCollection;
         return geom.toMap();
-        break;
       default:
     }
     return {};

@@ -4,7 +4,7 @@ import 'geometry.dart';
 
 /// Định nghĩa nguyên mẫu đối tượng hình học dạng đường
 class GeoJSONLineString implements Geometry {
-  List<List<double>> coordinates;
+  List<List<double>> coordinates = <List<double>>[];
   GeoJSONLineString(this.coordinates);
 
   @override
@@ -12,15 +12,14 @@ class GeoJSONLineString implements Geometry {
 
   GeoJSONLineString.fromMap(Map data) {
     var ll = data['coordinates'];
-    final posArray = <List<double>>[];
+    coordinates.clear();
     ll.forEach((l) {
       final pos = <double>[];
       l.forEach((value) {
         pos.add(value.toDouble());
       });
-      posArray.add(pos);
+      coordinates.add(pos);
     });
-    coordinates = posArray;
   }
 
   @override
@@ -53,10 +52,10 @@ class GeoJSONLineString implements Geometry {
     double nelat;
     double nelng;
     var first = coordinates.first;
-    swlat ??= first[1];
-    swlng ??= first[0];
-    nelat ??= first[1];
-    nelng ??= first[0];
+    swlat = first[1];
+    swlng = first[0];
+    nelat = first[1];
+    nelng = first[0];
     coordinates.forEach((List<double> pos) {
       if (swlat > pos[1]) swlat = pos[1];
       if (nelat < pos[1]) nelat = pos[1];

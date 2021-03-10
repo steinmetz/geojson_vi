@@ -37,7 +37,8 @@ extension GeometryTypeExtension on GeometryType {
       case GeometryType.geometryCollection:
         return 'GeometryCollection';
       default:
-        return null;
+        throw Exception('Invalid Geometry type name');
+        //TODO: write a test for this invalid type
     }
   }
 }
@@ -67,7 +68,8 @@ abstract class Geometry {
       case 'GeometryCollection':
         return GeoJSONGeometryCollection.fromMap(data);
     }
-    return null;
+    throw Exception('Invalid Geometry type');
+    //TODO: write a test for this invalid type
   }
 
   /// A collection of key/value pairs of geospatial data

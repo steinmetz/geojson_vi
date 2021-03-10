@@ -4,7 +4,7 @@ import 'geometry.dart';
 
 /// Định nghĩa nguyên mẫu đối tượng hình học dạng mảng các đường
 class GeoJSONMultiLineString implements Geometry {
-  List<List<List<double>>> coordinates;
+  List<List<List<double>>> coordinates = <List<List<double>>>[];
   GeoJSONMultiLineString(this.coordinates);
 
   @override
@@ -12,7 +12,7 @@ class GeoJSONMultiLineString implements Geometry {
 
   GeoJSONMultiLineString.fromMap(Map data) {
     var lll = data['coordinates'];
-    final ringArray = <List<List<double>>>[];
+    coordinates.clear();
     lll.forEach((ll) {
       final posArray = <List<double>>[];
       ll.forEach((l) {
@@ -22,9 +22,8 @@ class GeoJSONMultiLineString implements Geometry {
         });
         posArray.add(pos);
       });
-      ringArray.add(posArray);
-    });
-    coordinates = ringArray;
+      coordinates.add(posArray);
+    }); 
   }
 
   @override

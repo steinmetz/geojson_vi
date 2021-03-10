@@ -5,7 +5,7 @@ import 'geometry.dart';
 
 /// Định nghĩa nguyên mẫu đối tượng hình học dạng vùng
 class GeoJSONPolygon implements Geometry {
-  List<List<List<double>>> coordinates;
+  List<List<List<double>>> coordinates = <List<List<double>>>[];
   GeoJSONPolygon(this.coordinates);
 
   @override
@@ -14,7 +14,7 @@ class GeoJSONPolygon implements Geometry {
   @override
   GeoJSONPolygon.fromMap(Map data) {
     var lll = data['coordinates'];
-    final ringArray = <List<List<double>>>[];
+    coordinates.clear();
     lll.forEach((ll) {
       final posArray = <List<double>>[];
       ll.forEach((l) {
@@ -24,9 +24,8 @@ class GeoJSONPolygon implements Geometry {
         });
         posArray.add(pos);
       });
-      ringArray.add(posArray);
+      coordinates.add(posArray);
     });
-    coordinates = ringArray;
   }
 
   double _ringArea(List<List<double>> ringPos) {
@@ -64,10 +63,10 @@ class GeoJSONPolygon implements Geometry {
     double nelat;
     double nelng;
     var first = coordinates.first.first;
-    swlat ??= first[1];
-    swlng ??= first[0];
-    nelat ??= first[1];
-    nelng ??= first[0];
+    swlat = first[1];
+    swlng = first[0];
+    nelat = first[1];
+    nelng = first[0];
     coordinates.first.forEach((List<double> pos) {
       if (swlat > pos[1]) swlat = pos[1];
       if (nelat < pos[1]) nelat = pos[1];

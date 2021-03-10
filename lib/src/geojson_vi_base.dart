@@ -22,7 +22,9 @@ abstract class GeoJSON {
   /// Create new GeoJSON with file path
   static GeoJSON create(String path) {
     var geoJSON = _GeoJSON(path);
-    geoJSON._featureCollection ??= GeoJSONFeatureCollection();
+    geoJSON._featureCollection = GeoJSONFeatureCollection();
+    //TODO I am not sure 
+    // geoJSON._featureCollection ?= GeoJSONFeatureCollection();
     return geoJSON;
   }
 
@@ -52,7 +54,7 @@ extension GeoJSONTypeExtension on GeoJSONType {
       case GeoJSONType.featureCollection:
         return 'FeatureCollection';
       default:
-        return null;
+        throw Exception('Invalid GeoJSONType');
     }
   }
 }
@@ -64,11 +66,12 @@ class _GeoJSON implements GeoJSON {
 
   /// Default private constructor with cache applied
   factory _GeoJSON(String path) {
-    _GeoJSON geoJSON;
-    if (_cache[path] == null) {
-      geoJSON = _GeoJSON._init(path);
-    }
-    return _cache.putIfAbsent(path, () => geoJSON);
+    // _GeoJSON geoJSON;
+    // if (_cache[path] == null) {
+    //   geoJSON = _GeoJSON._init(path);
+    // }
+    // _cache.putIfAbsent(path, () => _GeoJSON._init(path));
+    return _cache.putIfAbsent(path, () => _GeoJSON._init(path));
   }
 
   /// Private constructor
@@ -78,13 +81,13 @@ class _GeoJSON implements GeoJSON {
   String _path;
 
   /// Private FeatureCollection object
-  GeoJSONFeatureCollection _featureCollection;
+  late GeoJSONFeatureCollection _featureCollection;
 
   /// Private load
   static Future<_GeoJSON> _load(String path) async {
     var file = File(path);
     if (!await file.exists()) {
-      return null;
+      throw Exception('File doesn\'t exists');
     }
     var geoJSON = _GeoJSON(path);
     if (geoJSON._featureCollection != null) {
@@ -155,7 +158,9 @@ class _GeoJSON implements GeoJSON {
       });
 
       /// For empty file
-      geoJSON._featureCollection ??= GeoJSONFeatureCollection();
+      geoJSON._featureCollection = GeoJSONFeatureCollection();
+      //TODO I am not sure here
+      // geoJSON._featureCollection ??= GeoJSONFeatureCollection();
       return geoJSON;
     }
   }
@@ -234,7 +239,7 @@ class _GeoJSON implements GeoJSON {
   GeoJSONFeatureCollection get featureCollection => _featureCollection;
 
   @override
-  Future<File> save({String newPath}) {
+  Future<File> save({String? newPath}) {
     var filePath = newPath ?? path;
     var file = File(filePath);
     return file.writeAsString(

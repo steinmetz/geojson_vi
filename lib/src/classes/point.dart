@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'geometry.dart';
 
 class GeoJSONPoint implements Geometry {
-  List<double> coordinates;
+  List<double> coordinates = <double>[];
   GeoJSONPoint(this.coordinates);
 
   @override
@@ -11,11 +11,10 @@ class GeoJSONPoint implements Geometry {
 
   GeoJSONPoint.fromMap(Map data) {
     var l = data['coordinates'];
-    final pos = <double>[];
+    coordinates.clear();
     l.forEach((value) {
-      pos.add(value.toDouble());
+      coordinates.add(value.toDouble());
     });
-    coordinates = pos;
   }
 
   @override

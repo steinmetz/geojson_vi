@@ -102,7 +102,7 @@ Future<void> main() async {
   await GeoJSON.load('data/polygon_with_holes.geojson').then((value) {
     value.featureCollection.features.forEach((element) {
       if (element.geometry.type == GeometryType.polygon) {
-        GeoJSONPolygon pg = element.geometry;
+        final pg = element.geometry;
         print('Area: ${pg.area}');
         print('bbox: ${pg.bbox}');
       }
